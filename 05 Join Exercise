@@ -1,0 +1,55 @@
+create database wild_db_quest;
+CREATE TABLE `wild_db_quest`.`wizard` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `firstname` VARCHAR(80) NOT NULL,
+  `lastname` VARCHAR(80) NOT NULL,
+  
+  PRIMARY KEY (`id`));
+  
+CREATE TABLE `wild_db_quest`.`player` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `wizard_id` INT NOT NULL,
+  `team_id` INT NOT NULL,
+  `role` VARCHAR(50) ,
+  `enrollment_date` DATE,
+  
+  PRIMARY KEY (`id`));
+ 
+CREATE TABLE `wild_db_quest`.`team` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(80) NOT NULL,
+ 
+  PRIMARY KEY (`id`));
+  
+
+ 
+ /*  1. Return lastnames, firstnames, each player’s role and team, arranged in alphabetical order by team, then by role in 
+  the team, then by lastname, and finally by firstname. */
+ SELECT lastname, firstname, role, name AS Team
+ FROM wizard
+ JOIN player
+ ON wizard.id = player.wizard_id
+ JOIN team
+ ON player.team_id=team.id
+ ORDER BY Team, lastname, firstname ASC;
+ 
+
+ /* 3. Return only the lastnames and firstnames of players who play the role of seeker, 
+ sorted by lastname and then firstname in alphabetical order. */
+ 
+ SELECT lastname, firstname, role 
+ FROM wizard
+ JOIN player
+ ON wizard.id = player.wizard_id
+ WHERE role= "seeker"
+ ORDER BY lastname,firstname ASC;
+ 
+ 
+ /* 3. Return a list of all of the wizards who do not play quidditch. */
+ 
+ SELECT lastname, firstname, role , wizard_id
+ FROM wizard
+ left JOIN player
+ ON wizard.id = player.wizard_id
+ where role is NULL
+ ORDER BY lastname,firstname ASC;
